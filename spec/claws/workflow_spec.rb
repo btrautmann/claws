@@ -48,30 +48,6 @@ RSpec.describe Workflow do
 
       expect(workflow.meta["triggers"]).to eq(["pull_request"])
     end
-
-    context "key normalization" do
-      it "preserves line numbers when normalizing hyphenated keys that are not the first key" do
-        workflow = described_class.load(<<~YAML)
-          name: test
-
-          on: push
-
-          jobs:
-            build:
-              defaults:
-                run:
-                  working-directory: ./app
-              runs-on: ubuntu-latest
-              steps:
-                - run: echo hello
-        YAML
-
-        job = workflow.jobs["build"]
-        runs_on_key = job.keys.find { |k| k == "runs_on" }
-
-        expect(runs_on_key.line).to eq(10)
-      end
-    end
   end
 
   context "line information" do
@@ -100,6 +76,30 @@ RSpec.describe Workflow do
       expect(BaseRule.parse_rule("$step.with.type_integer == 1").eval_with(values:)).to eq true
       expect(BaseRule.parse_rule("$step.with.type_nil == nil").eval_with(values:)).to eq true
       expect(BaseRule.parse_rule("$step.with.type_float == 1.2").eval_with(values:)).to eq true
+    end
+
+    context "key normalization" do
+      it "preserves line numbers when normalizing hyphenated keys that are not the first key" do
+        workflow = described_class.load(<<~YAML)
+          name: test
+
+          on: push
+
+          jobs:
+            build:
+              defaults:
+                run:
+                  working-directory: ./app
+              runs-on: ubuntu-latest
+              steps:
+                - run: echo hello
+        YAML
+
+        job = workflow.jobs["build"]
+        runs_on_key = job.keys.find { |k| k == "runs_on" }
+
+        expect(runs_on_key.line).to eq(10)
+      end
     end
   end
 

@@ -123,7 +123,7 @@ class Workflow
 
   def extract_normalized_on(workflow)
     if workflow["on"].is_a? String
-      line_number = workflow.keys.first { |k| k == "on" }.line
+      line_number = workflow.keys.find { |k| k == "on" }.line
       @on = workflow["on"] = [workflow["on"]]
       set_attr_line_number(:@on, line_number)
     else
@@ -211,7 +211,7 @@ class Workflow
   end
 
   def copy_key_with_line(blob, src, dst)
-    line = blob.keys.first { |k| k.to_sym == src.to_sym }.line
+    line = blob.keys.find { |k| k.to_sym == src.to_sym }.line
 
     new_key = String.new(dst).tap { |x| x.instance_eval { |_x| define_singleton_method(:line, -> { line }) } }
     # freezing it keeps ruby from making a copy w/o `line`

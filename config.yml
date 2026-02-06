@@ -5,7 +5,7 @@ Enabled:
   EmptyName:
   RiskyTriggers:
   UnapprovedRunners:
-    allowed_runners: ["ubuntu-latest", "macos-12"]
+    allowed_runners: ["ubuntu-latest", "macos-12", "macos-26"]
   CommandInjection:
   AutomaticMerge:
   UnpinnedAction:
